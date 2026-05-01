@@ -1,19 +1,19 @@
-/Binaries/
-/DerivedDataCache/
-/Intermediate/
-/Saved/
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
 
-/Build/**
-!/Build/**/
-!/Build/**/*.ico
-!/Build/**/*.png
-!/Build/**/*.xml
-!/Build/**/*.ini
-!/Build/**/*.plist
-!/Build/**/PakBlacklist*.txt
+**/Build/**
+!**/Build/**/
+!**/Build/**/*.ico
+!**/Build/**/*.png
+!**/Build/**/*.xml
+!**/Build/**/*.ini
+!**/Build/**/*.plist
+!**/Build/**/PakBlacklist*.txt
 
-/Plugins/**/Intermediate/
-/Plugins/**/Saved/
+**/Plugins/**/Intermediate/
+**/Plugins/**/Saved/
 
 *.sln
 *.suo
