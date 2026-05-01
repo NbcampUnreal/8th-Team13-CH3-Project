@@ -11,6 +11,7 @@
     <None Include="..\..\Source\TowerGameEditor.Target.cs">
       <Filter>Source</Filter>
     </None>
+    <None Include="..\..\.vsconfig" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -37,6 +38,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\TowerGame\TowerGame.h">
       <Filter>Source\TowerGame</Filter>
+    </ClCompile>
+    <Filter Include="Source\TowerGame\Private">
+      <UniqueIdentifier>{ABC82CDE-BDD7-3170-A9F6-B77FF547F3FF}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\TowerGame\Private\TGActorBase.cpp">
+      <Filter>Source\TowerGame\Private</Filter>
+    </ClCompile>
+    <Filter Include="Source\TowerGame\Public">
+      <UniqueIdentifier>{D7003537-68E9-3240-8C85-D68BEBF8FE6A}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\TowerGame\Public\TGActorBase.h">
+      <Filter>Source\TowerGame\Public</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
