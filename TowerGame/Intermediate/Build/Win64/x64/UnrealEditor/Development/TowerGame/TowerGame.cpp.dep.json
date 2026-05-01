@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\njh10\\documents\\unreal projects\\towergame\\source\\towergame\\towergame.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\njh10\\documents\\unreal projects\\towergame\\intermediate\\build\\win64\\x64\\towergameeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "c:\\users\\njh10\\documents\\unreal projects\\towergame\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\towergame\\definitions.towergame.h",
+            "c:\\users\\njh10\\documents\\unreal projects\\towergame\\source\\towergame\\towergame.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
