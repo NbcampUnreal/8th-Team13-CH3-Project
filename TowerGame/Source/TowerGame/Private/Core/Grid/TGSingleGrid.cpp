@@ -19,3 +19,15 @@ ATGSingleGrid::ATGSingleGrid()
 	//	ToDoEnd
 	
 }
+
+void ATGSingleGrid::SetParent(TObjectPtr<ATGGridBase> Parent)
+{
+	GridBase = Parent;
+}
+
+void ATGSingleGrid::SetBoxSize(float Size) const
+{
+	const float Scale = Size / 100.0f;
+	const FVector CurrentScale = Visualizer->GetRelativeScale3D();
+	Visualizer->SetRelativeScale3D(FVector(Scale, Scale, CurrentScale.Z));
+}

@@ -27,8 +27,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
 	bool CanBePlacedBuilding(FIntPoint Point);
 
+	//	실제로 건설이 가능한지 검사하지 않습니다.
+	//	실제로 건설이 가능한 위치인지 먼저 확인 한 후 호출해주세요.
 	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
 	void PlacingBuilding(FIntPoint Point);
+	
+	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
+	void RemoveBuilding(FIntPoint Point);
 
 protected:
 	virtual void BeginPlay() override;

@@ -6,15 +6,21 @@
 #include "TGActorBase.h"
 #include "TGSingleGrid.generated.h"
 
+class ATGGridBase;
+
 UCLASS()
 class TOWERGAME_API ATGSingleGrid : public ATGActorBase
 {
 	GENERATED_BODY()
 	//	그리드 위에 배치되는 최소 단위 클래스입니다.
 	//	개별 칸 관리에 사용됩니다.
+	//	TODO: 런타임에 감시가 필요한 타워 데이터에 대해 저장합니다.
 public:
 	ATGSingleGrid();
 	
+	void SetParent(TObjectPtr<ATGGridBase> Parent);
+	
+	void SetBoxSize(float Size) const;
 	
 protected:
 	
@@ -23,4 +29,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "TowerGame|Grid")
 	TObjectPtr<UStaticMeshComponent> Visualizer;
 
+	
+private:
+	UPROPERTY()
+	TObjectPtr<ATGGridBase> GridBase = nullptr;
 };

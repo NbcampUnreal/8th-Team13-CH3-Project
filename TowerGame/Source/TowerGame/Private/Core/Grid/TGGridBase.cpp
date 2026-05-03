@@ -93,6 +93,19 @@ void ATGGridBase::PlacingBuilding(FIntPoint Point)
 	}
 }
 
+void ATGGridBase::RemoveBuilding(FIntPoint Point)
+{
+	bBuildingPlaced[Point.Y][Point.X] = false;
+	if (Point.Y == 0)
+	{
+		EntryPoints.Add(Point);
+	}
+	if (Point.Y == GridY - 1)
+	{
+		ExitPoints.Add(Point);
+	}
+}
+
 void ATGGridBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -106,6 +119,8 @@ void ATGGridBase::BeginPlay()
 		for (int32 j = 0; j < GridX; j++)
 		{
 			ATGSingleGrid* NewGrid = GetWorld()->SpawnActor<ATGSingleGrid>();
+			NewGrid->SetParent(this);
+			NewGrid->SetBoxSize(GridSize);
 			GridActors[i].Add(NewGrid);
 			bBuildingPlaced[i].Add(false);
 		}
