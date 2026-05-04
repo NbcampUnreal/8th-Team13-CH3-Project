@@ -25,6 +25,13 @@ ATGSingleGrid* ATGGridBase::GetSingleGridFromPosition(const FVector2D Position)
 	return GridActors[Y][X];
 }
 
+ATGSingleGrid* ATGGridBase::GetSingleGridFromPoint(const FIntPoint Point)
+{
+	if (Point.X < 0 || Point.X >= GridX)	return nullptr;
+	if (Point.Y < 0 || Point.Y >= GridY)	return nullptr;
+	return GridActors[Point.Y][Point.X];
+}
+
 FIntPoint ATGGridBase::GetPointFromPosition(const FVector Position) const
 {
 	FVector2D Pos = FVector2D(Position.X, Position.Y);
@@ -44,30 +51,18 @@ FIntPoint ATGGridBase::GetPointFromPosition(const FVector2D Position) const
 
 bool ATGGridBase::CanBePlacedBuilding(FIntPoint Point)
 {
-	bBuildingPlaced[Point.Y][Point.X] = true;
-
-	//	1. 진입점이 막혀있으면 안됨
-	//	2. 도착점이 막혀있으면 안됨
-	bool bBlocked = true;
-	for (int32 i = 0; i < GridX; i++)
+	//	1. 진입점을 막으면 안됨
+	//	2. 진출점을 막으면 안됨
+	if (EntryPoints.Contains(Point))
 	{
-		if (!bBuildingPlaced[0][i])
-		{
-			bBlocked = false;
-			break;
-		}
-		else if (!bBuildingPlaced[GridY - 1][i])
-		{
-			bBlocked = false;
-			break;
-		}
-	}
-
-	if (bBlocked)
-	{	//	진입점 또는 진출점이 막히게 됨
-		bBuildingPlaced[Point.Y][Point.X] = false;
 		return false;
 	}
+	if (ExitPoints.Contains(Point))
+	{
+		return false;
+	}
+
+	bBuildingPlaced[Point.Y][Point.X] = true;
 
 	//	3. 경로가 막혀있으면 안됨
 	if (!PathFinding())
@@ -106,6 +101,26 @@ void ATGGridBase::RemoveBuilding(FIntPoint Point)
 	}
 }
 
+void ATGGridBase::AddEntryPoint(FIntPoint Point)
+{
+	EntryPoints.Add(Point);
+}
+
+void ATGGridBase::RemoveEntryPoint(FIntPoint Point)
+{
+	EntryPoints.Remove(Point);
+}
+
+void ATGGridBase::AddExitPoint(FIntPoint Point)
+{
+	ExitPoints.Add(Point);
+}
+
+void ATGGridBase::RemoveExitPoint(FIntPoint Point)
+{
+	ExitPoints.Remove(Point);
+}
+
 void ATGGridBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -141,38 +156,28 @@ void ATGGridBase::PlacingGrid()
 			GridPos.X += (GridSize * j) + (GridSize / 2);
 			GridPos.Y += (GridSize * i) + (GridSize / 2);
 			SingleGrid->SetActorLocation(GridPos);
-			if (i == 0)
-			{	//	진입점
-				EntryPoints.Add(FIntPoint(j, i));
-			}
-			else if (i == GridY - 1)
-			{	//	진출점
-				ExitPoints.Add(FIntPoint(j, i));
-			}
 		}
 	}
 }
 
 bool ATGGridBase::PathFinding()
 {	//	경로간 비용이 없으므로 BFS로 패스파인딩
-	//	맵이 과도하게 커질 경우 비효율 적일 수 있으나 현재 수준에선 적절하다고 판단됨
-	//	방문 배열 생성
-	TArray<TArray<bool>> Visited;
-	Visited.SetNum(GridY);
+	//	모든 진출점 → 역방향 BFS → 도달 가능 셀 집합 구성
+	//	이후 모든 진입점이 해당 집합에 포함되는지 확인 (O(GridX * GridY), 1회 탐색으로 해결)
+
+	TArray<TArray<bool>> Reachable;
+	Reachable.SetNum(GridY);
 	for (int32 i = 0; i < GridY; i++)
 	{
-		Visited[i].Init(false, GridX);
+		Reachable[i].Init(false, GridX);
 	}
 
-	//	모든 열린 진입점을 동시에 출발점으로 추가 (멀티소스 BFS)
-	TArray<FIntPoint> Queue;	//	탐색큐
-	for (const FIntPoint& Entry : EntryPoints)
+	//	모든 열린 진출점을 동시에 출발점으로 추가 (멀티소스 역방향 BFS)
+	TArray<FIntPoint> Queue;
+	for (const FIntPoint& Exit : ExitPoints)
 	{
-		if (!bBuildingPlaced[Entry.Y][Entry.X])
-		{
-			Visited[Entry.Y][Entry.X] = true;
-			Queue.Add(Entry);
-		}
+		Reachable[Exit.Y][Exit.X] = true;
+		Queue.Add(Exit);
 	}
 
 	//	탐색 방향
@@ -180,31 +185,30 @@ bool ATGGridBase::PathFinding()
 	const int32 DY[] = { 0, 0, 1, -1 };
 
 	for (int32 Head = 0; Head < Queue.Num(); Head++)
-	{	
+	{
 		const FIntPoint Current = Queue[Head];
 
-		if (ExitPoints.Contains(Current))
-		{	//	탐색큐의 위치가 도착점
-			return true;
-		}
-
-		//	각 방향 확인
 		for (int32 d = 0; d < 4; d++)
 		{
 			const int32 NX = Current.X + DX[d];
 			const int32 NY = Current.Y + DY[d];
 
-			//	인덱스 벗어남
 			if (NX < 0 || NX >= GridX || NY < 0 || NY >= GridY) continue;
-			//	이미 방문 or 막힌 곳
-			if (Visited[NY][NX] || bBuildingPlaced[NY][NX]) continue;
+			if (Reachable[NY][NX] || bBuildingPlaced[NY][NX]) continue;
 
-			//	방문한 위치는 큐에 넣기
-			Visited[NY][NX] = true;
+			Reachable[NY][NX] = true;
 			Queue.Add(FIntPoint(NX, NY));
 		}
 	}
 
-	//	탐색 완료 했으나 길찾기 실패
-	return false;
+	//	모든 진입점이 진출점으로 도달 가능한지 확인
+	for (const FIntPoint& Entry : EntryPoints)
+	{
+		if (!Reachable[Entry.Y][Entry.X])
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
