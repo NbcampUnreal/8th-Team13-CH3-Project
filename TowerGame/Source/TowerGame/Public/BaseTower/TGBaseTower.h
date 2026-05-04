@@ -6,6 +6,8 @@
 #include "NavModifierComponent.h"
 #include "TGBaseTower.generated.h"
 
+class UStaticMeshComponent;
+
 UCLASS()
 class TOWERGAME_API ABaseTower : public AActor
 {

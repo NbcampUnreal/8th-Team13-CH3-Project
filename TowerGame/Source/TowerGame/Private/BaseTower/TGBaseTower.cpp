@@ -2,6 +2,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "NavModifierComponent.h"
 #include "NavAreas/NavArea_Null.h"
+#include "Components/StaticMeshComponent.h"
 
 ABaseTower::ABaseTower()
 {
