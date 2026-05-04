@@ -1,3 +1,10 @@
+# 소스 파일 텍스트 처리 (줄바꿈 정규화)
+*.h     text eol=lf
+*.cpp   text eol=lf
+*.cs    text eol=lf
+*.ini   text eol=lf
+
+# 바이너리 에셋 LFS
 *.uasset filter=lfs diff=lfs merge=lfs -text
 *.umap  filter=lfs diff=lfs merge=lfs -text
 *.png   filter=lfs diff=lfs merge=lfs -text
