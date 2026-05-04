@@ -16,14 +16,20 @@ class TOWERGAME_API ATGGridBase : public ATGActorBase
 public:
 	ATGGridBase();
 
+	//	월드 좌표에서 그리드 가져오기
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="TowerGame|Grid")
 	ATGSingleGrid* GetSingleGridFromPosition(const FVector Position);
 	ATGSingleGrid* GetSingleGridFromPosition(const FVector2D Position);
+	//	2차원 배열 인덱스에서 그리드 가져오기
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="TowerGame|Grid")
+	ATGSingleGrid* GetSingleGridFromPoint(const FIntPoint Point);
 
+	//	월드 좌표에서 2차원 배열 인덱스 가져오기
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="TowerGame|Grid")
 	FIntPoint GetPointFromPosition(const FVector Position) const;
 	FIntPoint GetPointFromPosition(const FVector2D Position) const;
 
+	//	건설 가능한 위치인지 확인
 	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
 	bool CanBePlacedBuilding(FIntPoint Point);
 
@@ -31,9 +37,19 @@ public:
 	//	실제로 건설이 가능한 위치인지 먼저 확인 한 후 호출해주세요.
 	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
 	void PlacingBuilding(FIntPoint Point);
-	
+
 	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
 	void RemoveBuilding(FIntPoint Point);
+
+	//	진입점과 진출점 관리 함수
+	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
+	void AddEntryPoint(FIntPoint Point);
+	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
+	void RemoveEntryPoint(FIntPoint Point);
+	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
+	void AddExitPoint(FIntPoint Point);
+	UFUNCTION(BlueprintCallable, Category="TowerGame|Grid")
+	void RemoveExitPoint(FIntPoint Point);
 
 protected:
 	virtual void BeginPlay() override;
@@ -54,12 +70,14 @@ protected:
 	float GridSize;
 
 private:
-	
+
 	bool PathFinding();
-	
+
 	TArray<TArray<bool>> bBuildingPlaced;
 	TArray<TArray<ATGSingleGrid*>> GridActors;
+	//	진입점 목록
 	TSet<FIntPoint> EntryPoints;
+	//	진출점 목록
 	TSet<FIntPoint> ExitPoints;
 
 };

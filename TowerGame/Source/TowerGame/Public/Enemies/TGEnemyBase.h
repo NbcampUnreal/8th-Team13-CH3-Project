@@ -16,7 +16,6 @@ class TOWERGAME_API ATGEnemyBase : public ACharacter
 public:
 	// Unreal Life Cycle
 	ATGEnemyBase();
-	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 public:
@@ -24,6 +23,8 @@ public:
 	TObjectPtr<ATGNavigationManager> NavigationManager;
 	
 public:
+	void InitializeEnemy(ATGNavigationManager* InNavigationManager);
+	
 	// 경로 
 	void RequestRepath();
 	void SetNavigationManager(ATGNavigationManager* InNavigationManager);

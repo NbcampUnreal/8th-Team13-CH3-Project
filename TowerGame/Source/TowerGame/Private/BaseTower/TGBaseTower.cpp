@@ -46,5 +46,6 @@ void ABaseTower::FinalizeInstallation()
 	if (DynamicMaterial)
 	{
 		DynamicMaterial->SetScalarParameterValue(TEXT("Opacity"), 1.0f);
+		//test
 	}
 }
