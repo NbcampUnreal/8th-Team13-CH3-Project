@@ -82,13 +82,9 @@ FVector ATGNavigationManager::GetCoreLocation() const
 	return CoreActor->GetActorLocation();
 }
 
-bool ATGNavigationManager::CanPlaceBuildingTemporary(const FVector& BuildLocation) const
+void ATGNavigationManager::NotifyBuildingPlaced(const FVector& BuildLocation)
 {
-	return true;
-}
-
-void ATGNavigationManager::NotifyBuildingPlacedTemporary(const FVector& BuildLocation)
-{
+	// todo 그리드 맵 건물이 배치, 제거 되었을 때의 정보를 인자로 받아 경로 재설정할 객체를 판단 예정
 	RepathAllEnemies();
 }
 

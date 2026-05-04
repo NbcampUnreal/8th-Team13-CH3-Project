@@ -32,8 +32,7 @@ public:
 	FVector GetCoreLocation() const;
 
 	// 그리드 연동 전 임시 사용 함수
-	bool CanPlaceBuildingTemporary(const FVector& BuildLocation) const;
-	void NotifyBuildingPlacedTemporary(const FVector& BuildLocation);
+	void NotifyBuildingPlaced(const FVector& BuildLocation = FVector::ZeroVector);
 
 protected:
 	// 목적지
