@@ -3,46 +3,46 @@
 
 ABaseTower::ABaseTower()
 {
-	// ������ �������� ������ ƽ�� ��(����ȭ)
+	// 발판은 움직이지 않으니 틱을 끔(최적화)
 	PrimaryActorTick.bCanEverTick = false;
 
-	// ���Ǹ޽�
+	// 발판메시
 	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseMesh"));
 	RootComponent = BaseMesh;
 
-	// �渷 (�⺻��)
+	// 길막 (기본값)
 	BaseMesh->SetCollisionProfileName(TEXT("BlockAll"));
 
-	// ���� ��ġ����
+	// 무기 설치지점
 	MountPoint = CreateDefaultSubobject<USceneComponent>(TEXT("MountPoint"));
 	MountPoint->SetupAttachment(RootComponent);
 
-	// ť�� ���̿� ���缭 ��ġ ��ġ�� ����(50.f)���� ����
+	// 큐브 높이에 맞춰서 설치 위치를 윗면(50.f)으로 고정
 	MountPoint->SetRelativeLocation(FVector(0.f, 0.f, 50.f));
 }
 
 void ABaseTower::SetPreviewMode()
 {
-	// �浹����
+	// 충돌끄기
 	BaseMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	// ������ ó��
+	// 반투명 처리
 	DynamicMaterial = BaseMesh->CreateDynamicMaterialInstance(0);
 
 	if (DynamicMaterial)
 	{
-		// ��Ƽ���� 'Opacity'��� �Ķ���Ͱ� �־�� �۵��մϴ�.
+		// 머티리얼에 'Opacity'라는 파라미터가 있어야 작동합니다.
 		DynamicMaterial->SetScalarParameterValue(TEXT("Opacity"), 0.5f);
 	}
 }
 
 void ABaseTower::FinalizeInstallation()
 {
-	// �浹 �ѱ�
+	// 충돌 켜기
 	BaseMesh->SetCollisionProfileName(TEXT("BlockAll"));
 	BaseMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
-	// 2. �������ϰ� ����
+	// 불투명하게 복구
 	if (DynamicMaterial)
 	{
 		DynamicMaterial->SetScalarParameterValue(TEXT("Opacity"), 1.0f);
