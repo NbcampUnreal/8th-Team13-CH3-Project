@@ -13,15 +13,21 @@ UCLASS()
 class TOWERGAME_API ATGEnemySpawner : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Unreal LifeCycle
 	ATGEnemySpawner();
-	
+
 	// Enemy 생성
 	ATGEnemyBase* SpawnEnemy(TSubclassOf<ATGEnemyBase> EnemyClass);
-	
+
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<USceneComponent> SceneRoot;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Navigation")
 	TObjectPtr<ATGNavigationManager> NavigationManager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawn")
+	FVector  SpawnLocationOffset;
 };
