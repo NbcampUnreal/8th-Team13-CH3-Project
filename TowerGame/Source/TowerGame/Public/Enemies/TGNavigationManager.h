@@ -22,7 +22,7 @@ public:
 public:
 	// 몬스터 등록
 	void RegisterEnemy(ATGEnemyBase* Enemy);
-	void UnResgisterEnemy(ATGEnemyBase* Enemy);
+	void UnRegisterEnemy(ATGEnemyBase* Enemy);
 	
 	FVector GetCoreLocation() const;
 	

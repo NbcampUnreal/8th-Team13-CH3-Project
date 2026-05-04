@@ -26,7 +26,7 @@ void ATGNavigationManager::RegisterEnemy(ATGEnemyBase* Enemy)
 	AliveEnemies.AddUnique(Enemy);
 }
 
-void ATGNavigationManager::UnResgisterEnemy(ATGEnemyBase* Enemy)
+void ATGNavigationManager::UnRegisterEnemy(ATGEnemyBase* Enemy)
 {
 	if (!Enemy) return;
 
