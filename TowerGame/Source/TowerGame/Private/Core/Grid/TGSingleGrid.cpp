@@ -16,6 +16,12 @@ ATGSingleGrid::ATGSingleGrid()
 	{
 		Visualizer->SetStaticMesh(CubeMesh.Object);
 	}
+	
+	static ConstructorHelpers::FObjectFinder<UMaterial> CubeMaterial(TEXT("/Game/Core/Grid/Materials/M_GridTempMat.M_GridTempMat"));
+	if (CubeMaterial.Succeeded())
+	{
+		Visualizer->SetMaterial(0, CubeMaterial.Object);
+	}
 	//	ToDoEnd
 	
 }
