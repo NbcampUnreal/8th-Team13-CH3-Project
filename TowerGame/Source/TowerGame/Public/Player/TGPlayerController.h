@@ -6,6 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "TGPlayerController.generated.h"
 
+class UInputMappingContext;
+class UInputAction;
+
 /**
  * 
  */
@@ -13,5 +16,16 @@ UCLASS()
 class TOWERGAME_API ATGPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+public:
+	ATGPlayerController();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputMappingContext> InputMappingContext;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputAction> Action_Move;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputAction> Action_Look;
+
+protected:
+	virtual void BeginPlay() override;
 };

@@ -14,12 +14,12 @@ USTRUCT(BlueprintType)
 struct FTGEnemySpawnInfo
 {
 	GENERATED_BODY()
-	
+
 	FTGEnemySpawnInfo();
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Wave")
 	TSubclassOf<ATGEnemyBase> EnemyClass;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Wave", meta = (ClampMin = 0))
 	int32 SpawnCount;
 };
@@ -29,15 +29,15 @@ USTRUCT(BlueprintType)
 struct FTGWaveInfo
 {
 	GENERATED_BODY()
-	
+
 	FTGWaveInfo();
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Wave")
 	TArray<FTGEnemySpawnInfo> EnemySpawnInfos;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Wave", meta = (ClampMin = "0.01"))
 	float SpawnInterval;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Wave", meta = (ClampMin = "0"))
 	float DelayAfterSpawnCompleted;
 };
@@ -50,48 +50,60 @@ UCLASS()
 class TOWERGAME_API ATGWaveManager : public AActor
 {
 	GENERATED_BODY()
-	
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Wave")
 	TObjectPtr<ATGEnemySpawner> EnemySpawner;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Wave")
 	TArray<FTGWaveInfo> WaveInfos;
-	
+
 private:
 	// 스폰 타이머
 	FTimerHandle SpawnTimerHandle;
 	FTimerHandle NextWaveDelayTimerHandle;
-	
+
 	// 웨이브 인덱스
 	int32 NextWaveIndex;
 	int32 ActiveWaveIndex;
+
+	// Spawn 인덱스
 	bool bIsSpawning;
 	int32 CurrentSpawnInfoIndex;
 	int32 SpawnedCountInCurrentInfo;
-	
-public:	
-	// Unreal LifeCycle
+
+public:
 	ATGWaveManager();
+
+protected:
+	//Unreal LifeCycle
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+public:
+	// 싱글톤 인스턴스 반환
+	static  ATGWaveManager* Get(const UObject* WorldContextObject);
+
+private:
+	static TWeakObjectPtr<ATGWaveManager> Instance;
 
 public:
 	// Wave 시작
 	UFUNCTION(BlueprintCallable, Category = "Wave")
 	bool StartNextWave();
-	
+
 public:
 	// Wave Event
 	UPROPERTY(BlueprintAssignable, Category = "Wave")
 	FOnWaveStarted OnWaveStarted;
-	
+
 	UPROPERTY(BlueprintAssignable, Category = "Wave")
 	FOnWaveSpawnCompleted OnWaveSpawnCompleted;
-	
+
 private:
 	// Wave 관리
 	void SpawnNextEnemy();
 	bool MoveToNextSpawnInfo();
-	
 	void FinishCurrentWaveSpawn();
 	void HandleNextWaveDelayFinished();
 	void InitializeSpawnState(int32 WaveIndex);
