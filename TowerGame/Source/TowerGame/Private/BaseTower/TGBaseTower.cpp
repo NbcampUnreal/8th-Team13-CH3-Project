@@ -1,5 +1,6 @@
 #include "BaseTower/TGBaseTower.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Components/StaticMeshComponent.h"
 
 ABaseTower::ABaseTower()
 {

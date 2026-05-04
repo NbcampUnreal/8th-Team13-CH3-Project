@@ -2,8 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/StaticMeshComponent.h"
+//#include "Components/StaticMeshComponent.h"	//	<- 전방선언으로 대체
 #include "TGBaseTower.generated.h"
+
+class UStaticMeshComponent;
 
 UCLASS()
 class TOWERGAME_API ABaseTower : public AActor
